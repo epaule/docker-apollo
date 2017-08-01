@@ -37,6 +37,10 @@ RUN rm -rf ${CATALINA_HOME}/webapps/* && \
 
 ENV CONTEXT_PATH ROOT
 
+# setup TomCat SSL on 8443
+RUN keytool -genkey -alias tomcat -keyalg RSA -storepass changeit -keypass changeit -dname "CN=WormBase,OU=ParaSite,O=EMBL-EBI,L=Cambridge,ST=Cambridgeshire,C=UK"
+RUN sed -i 's/<Service name="Catalina">/<Service name="Catalina">\n\n    <Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol"\n        maxThreads="25" SSLEnabled="true" scheme="https" secure="true"\n        clientAuth="false" sslProtocol="TLS" \/>/' ${CATALINA_HOME}/conf/server.xml
+
 # Download chado schema
 RUN wget --quiet https://github.com/erasche/chado-schema-builder/releases/download/1.31-jenkins97/chado-1.31.sql.gz -O /chado.sql.gz && \
 	gunzip /chado.sql.gz
