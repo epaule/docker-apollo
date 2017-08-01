@@ -31,6 +31,7 @@ This procedure starts tomcat in a standard virtualized environment with a Postgr
 - `docker run -it -p 8888:8080 gmod/apollo:apollo-only` # from apollo only (no postgresql)
 - `docker run -it -v /jbrowse/root/directory/:/data -p 8888:8080 gmod/apollo:latest`
 - `docker run -it -v /jbrowse/root/directory/:/data  -p 8888:8080 quay.io/gmod/docker-apollo` # built by quay.io
+- `docker run -it -v /jbrowse/root/directory/:/data  -p 8888:8443 quay.io/gmod/docker-apollo` # expose only the SSL port on 8888
 - Apollo will be available at [http://localhost:8888/](http://localhost:8888/) (or 8888 if you don't configure the port)
 
 When you use the above mount directory ```/jbrowse/root/directory``` and your genome is in 
