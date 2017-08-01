@@ -38,7 +38,7 @@ ENV CONTEXT_PATH ROOT
 
 # setup TomCat SSL on 8443
 RUN keytool -genkey -validity 365 -alias tomcat -keyalg RSA -storepass changeit -keypass changeit -dname "CN=WormBase,OU=ParaSite,O=EMBL-EBI,L=Cambridge,ST=Cambridgeshire,C=UK"
-RUN sed -i 's/<Service name="Catalina">/<Service name="Catalina">\n\n    <Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol"\n        maxThreads="25" SSLEnabled="true" scheme="https" secure="true"\n        clientAuth="false" sslProtocol="TLS" acceptCount="100" keystoreFile="/root/.keystore" keystorePass="changeit"\/>/' ${CATALINA_HOME}/conf/server.xml
+RUN sed -i 's/<Service name="Catalina">/<Service name="Catalina">\n\n    <Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol"\n        maxThreads="25" SSLEnabled="true" scheme="https" secure="true"\n        clientAuth="false" sslProtocol="TLS" acceptCount="100" keystoreFile="\/root\/.keystore" keystorePass="changeit"\/>/' ${CATALINA_HOME}/conf/server.xml
 RUN sed -i 's/redirectPort="8443"//g' ${CATALINA_HOME}/conf/server.xml
 
 # Download chado schema
