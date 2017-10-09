@@ -11,7 +11,7 @@ environments {
 
             driverClassName = "org.postgresql.Driver"
             dialect = "org.hibernate.dialect.PostgresPlusDialect"
-            url = System.getenv("WEBAPOLLO_DB_URI") ?: "jdbc:postgresql://127.0.0.1/apollo"
+            url = "jdbc:postgresql://${System.getenv("WEBAPOLLO_DB_HOST")?:"127.0.0.1"}/${System.getenv("WEBAPOLLO_DB_NAME")?:"apollo"}"
 
             properties {
                 // See http://grails.org/doc/latest/guide/conf.html#dataSource for documentation
@@ -36,12 +36,13 @@ environments {
         }
         dataSource_chado {
             dbCreate = "update"
-            username = "apollo"
-            password = "apollo"
+            username = System.getenv("CHADO_DB_USERNAME") ?: "apollo"
+            password = System.getenv("CHADO_DB_PASSWORD") ?: "apollo"
 
             driverClassName = "org.postgresql.Driver"
             dialect = "org.hibernate.dialect.PostgresPlusDialect"
-            url = "jdbc:postgresql://127.0.0.1/chado"
+
+            url = "jdbc:postgresql://${System.getenv("CHADO_DB_HOST")?:"127.0.0.1"}/${System.getenv("CHADO_DB_NAME")?:"chado"}"
 
             properties {
                 // See http://grails.org/doc/latest/guide/conf.html#dataSource for documentation
@@ -99,7 +100,7 @@ apollo {
 jbrowse {
     git {
         url = "https://github.com/GMOD/jbrowse"
-        tag = "1.12.3-release"
+        tag = "9d765aecaee02a41844fed11a241fdb4c35fc9f8"
     }
     plugins {
         WebApollo{
@@ -117,12 +118,11 @@ jbrowse {
         HideTrackLabels{
             included = true
         }
-        // TODO
-        GCContent{
-            git = 'https://github.com/cmdcolin/GCContent'
-            branch = 'master'
-            alwaysRecheck = "true"
-            alwaysPull = "true"
-        }
+//        GCContent{
+//            git = 'https://github.com/cmdcolin/GCContent'
+//            branch = 'master'
+//            alwaysRecheck = "true"
+//            alwaysPull = "true"
+//        }
     }
 }
