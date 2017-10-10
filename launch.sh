@@ -32,9 +32,9 @@ until pg_isready $WEBAPOLLO_HOST_FLAG; do
 	sleep 1;
 done
 
-echo "Postgres is up, configuring database"
+echo "Postgres is up, configuring database for $WEBAPOLLO_DB_HOST / $WEBAPOLLO_DB_USERNAME / $WEBAPOLLO_DB_PASSWORD"
 
-su postgres -c "psql $WEBAPOLLO_HOST_FLAG -lqt | cut -d \| -f 1 | grep -qw $WEBAPOLLO_DB_NAME"
+su postgres -c "PGPASSWORD=$WEBAPOLLO_DB_PASSWORD psql -U $WEBAPOLLO_DB_USERNAME $WEBAPOLLO_HOST_FLAG -lqt | cut -d \| -f 1 | grep -qw $WEBAPOLLO_DB_NAME"
 if [[ "$?" == "1" ]]; then
 	echo "Apollo database not found, creating..."
 	su postgres -c "createdb $WEBAPOLLO_HOST_FLAG $WEBAPOLLO_DB_NAME"
@@ -43,7 +43,7 @@ if [[ "$?" == "1" ]]; then
 fi
 
 echo "Configuring Chado"
-su postgres -c "psql $CHADO_HOST_FLAG -lqt | cut -d \| -f 1 | grep -qw $CHADO_DB_NAME"
+su postgres -c "PGPASSWORD=$CHADO_DB_PASSWORD psql -U $CHADO_DB_USERNAME $CHADO_HOST_FLAG -lqt | cut -d \| -f 1 | grep -qw $CHADO_DB_NAME"
 if [[ "$?" == "1" ]]; then
 	echo "Chado database not found, creating..."
 	su postgres -c "createdb $CHADO_HOST_FLAG $CHADO_DB_NAME"
