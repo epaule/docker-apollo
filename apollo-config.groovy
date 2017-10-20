@@ -100,7 +100,7 @@ apollo {
 jbrowse {
     git {
         url = "https://github.com/GMOD/jbrowse"
-        tag = "9d765aecaee02a41844fed11a241fdb4c35fc9f8"
+        tag = "d3827c4e81054ef65933ca792d228f786d849ba4"
     }
     plugins {
         WebApollo{
