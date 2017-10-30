@@ -118,5 +118,10 @@ jbrowse {
         HideTrackLabels{
             included = true
         }
+        GCContent{
+            git = 'https://github.com/elsiklab/gccontent'
+            branch = 'master'
+            alwaysPull = "true"
+        }
     }
 }
