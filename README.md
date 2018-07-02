@@ -1,81 +1,74 @@
 # Apollo
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1295754.svg)](https://doi.org/10.5281/zenodo.1295754)
+[![Build](https://travis-ci.org/GMOD/Apollo.svg?branch=master)](https://travis-ci.org/GMOD/Apollo?branch=master)
+[![Coverage](https://coveralls.io/repos/github/GMOD/Apollo/badge.svg?branch=master)](https://coveralls.io/github/GMOD/Apollo?branch=master)
+[![Documentation](https://readthedocs.org/projects/genomearchitect/badge/?version=latest)](https://genomearchitect.readthedocs.org/en/latest/)
+[![Chat at Gitter](https://badges.gitter.im/GMOD/Apollo.svg)](https://gitter.im/GMOD/Apollo?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-![Apollo Logo](https://github.com/GMOD/docker-apollo/raw/master/img/ApolloLogo_100x36.png)
-[![DOI](https://zenodo.org/badge/58064464.svg)](https://zenodo.org/badge/latestdoi/58064464)
+### [![](https://github.com/GMOD/Apollo/blob/master/docs/images/download_small.png)&nbsp;Download the latest release](https://github.com/GMOD/Apollo/releases/latest)
 
+An instantaneous, collaborative, genome annotation editor.  The stack is a Java web application / database backend and a
+Javascript client that runs in a web browser as a JBrowse plugin.  
 
+For general information on Apollo, go to [http://genomearchitect.org/](http://genomearchitect.org/).
 
-> Apollo is a browser-based tool for visualisation and editing of sequence
-> annotations. It is designed for distributed community annotation efforts,
-> where numerous people may be working on the same sequences in geographically
-> different locations; real-time updating keeps all users in sync during the
-> editing process.
+Complete Apollo installation and configuration instructions are available from the [Apollo documentation pages](http://genomearchitect.readthedocs.io/en/latest/)
 
-## Running the Container
-
-The container is publicly available as `gmod/apollo:latest`. 
-
-There are a large number of environment variables that can be adjusted to suit
-your site's needs. These can be seen in the
-[apollo-config.groovy](https://github.com/GMOD/Apollo/blob/master/sample-docker-apollo-config.groovy)
-file.
-
-## Quickstart
-
-This procedure starts tomcat in a standard virtualized environment with a PostgreSQL database with [Chado](http://gmod.org/wiki/Introduction_to_Chado).
-
-Install [docker](https://docs.docker.com/engine/installation/) for your system if not previously done.
-
-Choose an option:
-
-- To test a versioned release to test installation, e.g.: `docker run -it -p 8888:8080 quay.io/gmod/docker-apollo:2.0.8`  [Other available versions](https://quay.io/repository/gmod/docker-apollo?tab=tags)
-
-- Install a latest release to test installation: `docker run -it -p 8888:8080 gmod/apollo:latest` 
-  -  To make sure you have the latest pull with ```docker pull gmod/apollo``` to fetch newer versions
-  
-- If using within a larger context (e.g., as part of a docker-compose script) you can run an ```apollo-only``` branch provides only apollo + tomcat (no PostgreSQL):  
-  - `docker run -it -p 8888:8080 gmod/apollo:apollo-only` 
-  
-- To run in production against JBrowse data and a persistent database (you can create an empty directory called `postgres-data`):  
-    - `docker run -it -v /jbrowse/root/directory/:/data -v postgres-data:/var/lib/postgresql -p 8888:8080 gmod/apollo:latest`
-
-- You can run production using the build created by quay.io instead (https://quay.io/repository/gmod/docker-apollo):
-    - `docker run -it -v /jbrowse/root/directory/:/data -v postgres-data:/var/lib/postgresql  -p 8888:8080 quay.io/gmod/docker-apollo:latest`
-    
-In all cases, Apollo will be available at [http://localhost:8888/](http://localhost:8888/) (or 8888 if you don't configure the port)
-
-When you use the above mount directory ```/jbrowse/root/directory``` and your genome is in 
-```/jbrowse/root/directory/myawesomegenome``` you'll point to the directory: ```/data/myawesomegenome```.
-
-NOTE: If you don't use a locally mounted PostgreSQL database (e.g., creating an empty directory and mounting using `-v postgres-data:/var/lib/postgresql`)
-or [set appropriate environment variables](https://docs.docker.com/engine/reference/commandline/run/) for a remote database 
-( see variables [defined here](https://github.com/GMOD/docker-apollo/blob/master/launch.sh)) your annotations and setup will not be persisted.
-
-### Logging In
-
-The default credentials in this image are:
-
-| Credentials |                    |
-| ---         | ------------------ |
-| Username    | `admin@local.host` |
-| Password    | `password`         |
+The Apollo client is implemented as a plugin for [JBrowse](http://jbrowse.org).  Additional JBrowse plugins may be found in the [JBrowse registry](https://gmod.github.io/jbrowse-registry/) and configured in ```apollo-config.groovy```.
 
 
-### Example Workflow
+## Setup guide
+
+[Setup guide](docs/Setup.md) for deploying on production and [custom configuration guide](docs/Configure.md).  
+Launchable public Amazon EC2 images may also be found in most regions under the name 'Apollo' as well as [instructions for docker](docs/Setup.md#configure-for-docker). 
+
+The [quick-start guide for developers](docs/Apollo2Build.md) shows how to easily get started with Apollo. 
 
 
-1. Make the following directories somewhere with write permissions: `postgres-data` and `jbrowse-data`. 
-1. Copy your jbrowse data into `jbrowse-data`.  We provide [working sample data](http://genomearchitect.readthedocs.io/en/latest/Apollo2Build.html#adding-sample-data).
-1. Run the docker-command:  `docker run -it -v /absolute/path/to/jbrowse-data:/data -v /absolute/path/to/postgres-data:/var/lib/postgresql -p 8888:8080 quay.io/gmod/docker-apollo:latest`
-1. Login to the server at `http://localhost:8888/`
-1. Add an organism per the [instructions under Figure 2](http://genomearchitect.readthedocs.io/en/latest/Apollo2Build.html#login-to-the-web-interface).   Using yeast as an example, if you copy the data into `jbrowse-data/yeast` then on the server 
-you'll add the directory: `/data/yeast`. 
+## Migrating data from older versions
 
-![](./img/small-sample.png)
+You can follow steps in our [migration guide](https://github.com/GMOD/Apollo/blob/master/docs/Migration.md) to move annotations and data from older versions.
 
-### Chado
+### Note about data directories
 
-Chado support is now baked into the GMOD docker container image.
+Apollo 2.0 allows you to add multiple data directories to your webapp, and it expects the data directories to be stored
+outside of the tomcat webapps directory. Use the WA2.0 [quick-start guide](docs/Apollo2Build.md) to learn how to add new
+data directories for your organisms.
 
 
+**Important Note: All data from a webapps directory will disappear when doing tomcat "undeploy" operations, even if
+it is a symlink.**.
 
+
+### Launch Apollo in a temporary server
+
+To launch Apollo with temporary settings, use the `apollo run-local` command, which will initialize your server
+automatically with an H2 (zero-configuration) database.
+ 
+    apollo run-local 8080
+
+It will also use your custom settings if an apollo-config.groovy file has been setup.
+
+### Generate a war file
+
+Users can generate a war file (for example target/apollo-1.0.2.war) that will be copied into their tomcat webapps
+directory for production deployments:
+
+    apollo deploy 
+
+Note: make sure to create an apollo-config.groovy file following the sample data (e.g.
+sample-postgres-apollo-config.groovy) to make sure you use your preferred database settings.
+
+
+### Run locally for GWT development
+
+    apollo devmode 
+   
+
+### Thanks to
+[![IntelliJ](https://lh6.googleusercontent.com/--QIIJfKrjSk/UJJ6X-UohII/AAAAAAAAAVM/cOW7EjnH778/s800/banner_IDEA.png)](
+http://www.jetbrains.com/idea/index.html)
+
+[![YourKit](https://www.yourkit.com/images/yklogo.png)](https://www.yourkit.com/) 
+
+Thanks to YourKit for providing us the use of their YourKit Java Profiler.  YourKit supports Open Source.
