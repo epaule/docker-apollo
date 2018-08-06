@@ -27,7 +27,7 @@ The [quick-start guide for developers](docs/Apollo2Build.md) shows how to easily
 
 ## Migrating data from older versions
 
-You can follow steps in our [migration guide](https://github.com/GMOD/Apollo/blob/master/docs/Migration.md) to move annotations and data from older versions.
+- To test a versioned release to test installation, e.g.: `docker run -it -p 8888:8080 quay.io/gmod/docker-apollo:2.1.0`  [Other available versions](https://quay.io/repository/gmod/docker-apollo?tab=tags)
 
 ### Note about data directories
 
